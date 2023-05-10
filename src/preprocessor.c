@@ -145,10 +145,3 @@ char *preprocess_file(char *filename){
 	free(end);
 	return ppd_filename;
 }
-
-
-int main(int argc, char **argv) {
-	char * ppd_filename = preprocess_file(argv[1]);
-	printf("preprocessed file written to %s\n", ppd_filename);
-	return 0;
-}
