@@ -1,13 +1,10 @@
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <bits/stdc++.h>
 #include "preprocessor.h"
 
 #define TOKEN_SEP " \t"
 
 #define PREP_STRTOK(ORIG, STR, AUX, TOK)\
-	char *(STR) = malloc((strlen(line) + 1) * sizeof(char));\
+	char *(STR) = (char *) malloc((strlen(line) + 1) * sizeof(char));\
 	char *(AUX) = (STR);\
 	strcpy((STR), (ORIG));\
 	char *(TOK)
@@ -65,7 +62,7 @@ void strip_comment(char *line) {
 
 
 char *preprocess_file(char *filename){
-	char *ppd_filename = malloc((strlen(filename) + 5) * sizeof(char));
+	char *ppd_filename = (char *) malloc((strlen(filename) + 5) * sizeof(char));
 	strcpy(ppd_filename, filename);
 	strcat(ppd_filename, ".pre");
 	FILE *file, *ppd_file;
@@ -84,7 +81,7 @@ char *preprocess_file(char *filename){
 	rewind(file);
 
 	//ler o arquivo e tranformar para maiuscula
-	orig = calloc(str_len, sizeof(char));
+	orig = (char *) calloc(str_len, sizeof(char));
 	char *aux = orig;
 	char c;
 	while((c = fgetc(file)) != EOF) {
@@ -93,10 +90,10 @@ char *preprocess_file(char *filename){
 	}
 	fclose(file);
 
-	begin = calloc(str_len, sizeof(char));
-	end = calloc(4, sizeof(char));
-	text = calloc(str_len, sizeof(char));
-	data = calloc(str_len, sizeof(char));
+	begin = (char *) calloc(str_len, sizeof(char));
+	end = (char *) calloc(4, sizeof(char));
+	text = (char *) calloc(str_len, sizeof(char));
+	data = (char *) calloc(str_len, sizeof(char));
 	char *buffer = begin;
 	char *line;
 	aux = orig;
@@ -145,3 +142,10 @@ char *preprocess_file(char *filename){
 	free(end);
 	return ppd_filename;
 }
+
+int main(int argc, char **argv) {
+	char *ppd_filename = preprocess_file(argv[1]);
+	printf("preprocessed file in %s\n", ppd_filename);
+	return 0;
+}
+
