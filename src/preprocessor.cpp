@@ -1,4 +1,8 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+#include <string>
 #include "preprocessor.h"
 
 #define TOKEN_SEP " \t"
@@ -61,7 +65,8 @@ void strip_comment(char *line) {
 }
 
 
-char *preprocess_file(char *filename){
+std::string preprocess_file(const std::string str_filename){
+	const char *filename = str_filename.c_str();
 	char *ppd_filename = (char *) malloc((strlen(filename) + 5) * sizeof(char));
 	strcpy(ppd_filename, filename);
 	strcat(ppd_filename, ".pre");
@@ -140,12 +145,14 @@ char *preprocess_file(char *filename){
 	free(text);
 	free(data);
 	free(end);
-	return ppd_filename;
+	std::string str_ppd_filename(ppd_filename);
+	return str_ppd_filename;
 }
 
 int main(int argc, char **argv) {
-	char *ppd_filename = preprocess_file(argv[1]);
-	printf("preprocessed file in %s\n", ppd_filename);
+	std::string filename(argv[1]);
+	std::string ppd_filename = preprocess_file(filename);
+	printf("preprocessed file in %s\n", ppd_filename.c_str());
 	return 0;
 }
 

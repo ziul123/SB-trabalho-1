@@ -1,6 +1,7 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
+#include <string>
 
-char *preprocess_file(char *filename);
+std::string preprocess_file(const std::string str_filename);
 
 #endif
