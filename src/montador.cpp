@@ -9,27 +9,30 @@
 
 #define TOKEN_SEP " \t"
 
-bool is_linked(const char *str) {
+bool is_linked(const char *str, char *modulo) {
 	char *line = (char*) malloc((strlen(str) + 1) * sizeof(char));
 	char *aux = line;
 	sscanf(str, "%[^n]s", line);
-	modulo = strtok_r(aux, " ", &aux);
+	strcpy(modulo, strtok_r(aux, " ", &aux));
 	char *token = strtok_r(aux, " ", &aux);
 	bool result = strcmp(token, "BEGIN") == 0;
 	free(line);
 	return result;
 }
 
-bool is_extern(std::string token) {
-	return true;
+bool is_extern(const std::string token) {
+	if (token.substr(0, token.length()-1) == "EXTERN") 
+		return true;
+	else
+		return false;
 }
 
 bool is_label(std::string token) {
 	return true;
 }
 
-out_file_t single_pass(std::string filename) {
-	out_file_t out_file;
+out_file_t* single_pass(std::string filename) {
+	out_file_t* outfile;
 	symbol_table_t symbol_table;
 	def_table_t def_table;
 	use_table_t use_table;
@@ -48,19 +51,18 @@ out_file_t single_pass(std::string filename) {
 	fclose(file);
 
 	char *aux = orig;
-	char *modulo = malloc(str_len * sizeof(char))
+	char *modulo = (char *) malloc(str_len * sizeof(char));
 
 	bool link = is_linked(orig, modulo);
 	if(link) {
-		out_file.type = OBJ;
 		modulo[strlen(modulo)-1] = '\0';
 		std::string s(modulo);
 		symbol_cell_t sc = create_s_cell(0, true, false);
 		symbol_table[s] = sc;
 		strtok_r(aux, "\n", &aux);
-
+		*outfile = obj_file_t();
 	} else {
-		out_file.type = EXC;
+		*outfile = exc_file_t();
 	}
 	free(modulo);
 
@@ -81,16 +83,12 @@ out_file_t single_pass(std::string filename) {
 		}
 
 		if(is_label(token)) {
-			symbol_table
+			//symbol_table
 		}
 		//diretivas
 	}
 	free(orig);
-	return out_file;
-}
-
-void write_file(std::string filename, out_file_t out_file) {
-
+	return outfile;
 }
 
 int main(int argc, char **argv) {
@@ -104,8 +102,8 @@ int main(int argc, char **argv) {
 		std::string filename(argv[i]);
 		std::string asm_filename = filename + ".asm";
 		std::string ppd_filename = preprocess_file(asm_filename);
-		out_file_t out_file = single_pass(ppd_filename);
-		write_file(filename, out_file);
+		out_file_t* out_file = single_pass(ppd_filename);
+		out_file->write_file(filename);
 		filenames[i-1] = filename;
 	}
 	printf("Assembled given files into %s\n", strVectorJoin(filenames, ", ").c_str());

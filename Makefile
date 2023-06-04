@@ -9,7 +9,7 @@ SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 DEP_FILES = $(OBJ_FILES:.o=.d)
 
-PROGRAMS = preprocessor montador
+PROGRAMS = montador linker
 
 .PHONY: all
 all: setup $(PROGRAMS)
@@ -21,7 +21,7 @@ setup:
 preprocessor: $(OBJ_DIR)/preprocessor.o $(OBJ_DIR)/utils.o
 	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
 
-montador: $(OBJ_DIR)/montador.o $(OBJ_DIR)/tables.o $(OBJ_DIR)/preprocessor.o
+montador: $(OBJ_DIR)/montador.o $(OBJ_DIR)/tables.o $(OBJ_DIR)/preprocessor.o $(OBJ_DIR)/utils.o
 	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp

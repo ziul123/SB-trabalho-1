@@ -2,23 +2,35 @@
 #define FILES_H
 #include "tables.h"
 
-typedef enum filetype {OBJ, EXC} filetype;
+class out_file_t {
+	public:
+		std::vector<int> code;
+		out_file_t() {/*this->code = std::vector<int>;*/}
+		virtual void write_file(std::string filename) = 0;
+};
 
-typedef struct obj_file_t {
-	use_table_t use_table;
-	def_table_t def_table;
-	std::vector<int> relative;
-	std::vector<int> code;
-} obj_file_t;
+class obj_file_t: public out_file_t {
+	public:
+		use_table_t use_table;
+		def_table_t def_table;
+		std::vector<int> relative;
+		obj_file_t(): out_file_t() {/*
+			this->use_table = std::map<std::string, std::vector<int>>;
+			this->def_table = std::map<std::string, int>;
+			this->relative = std::vector<int>;*/
+		}
+		void write_file(std::string filename) override {
+		//TODO
+		} 
+};
 
-typedef std::vector<int> exc_file_t;
+class exc_file_t: public out_file_t {
+	public:
+		exc_file_t(): out_file_t(){};
+		void write_file(std::string filename) override {
+		//TODO
+		}
+};
 
-typedef struct out_file_t {
-	filetype type;
-	union {
-		obj_file_t obj_file;
-		exc_file_t exc_file;
-	};
-} out_file_t;
 
 #endif

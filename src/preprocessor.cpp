@@ -65,7 +65,7 @@ void strip_comment(char *line) {
 
 std::string preprocess_file(const std::string str_filename){
 	const char *filename = str_filename.c_str();
-	char *ppd_filename = (char *) malloc((strlen(filename) + 4) * sizeof(char));
+	char *ppd_filename = (char *) malloc((strlen(filename) + 5) * sizeof(char));
 	strcpy(ppd_filename, filename);
 	strcat(ppd_filename, ".pre");
 	FILE *file, *ppd_file;
@@ -150,7 +150,7 @@ std::string preprocess_file(const std::string str_filename){
 	std::string str_ppd_filename(ppd_filename);
 	return str_ppd_filename;
 }
-
+/*
 int main(int argc, char **argv) {
 	if (argc == 1) {
 		printf("Please, input the files you want to pre-process when calling the program.");
@@ -166,3 +166,4 @@ int main(int argc, char **argv) {
 	
 	return 0;
 }
+*/
