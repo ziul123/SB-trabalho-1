@@ -5,6 +5,7 @@
 #include "files.h"
 #include "preprocessor.h"
 #include "tables.h"
+#include "utils.h"
 
 #define TOKEN_SEP " \t"
 
@@ -64,16 +65,6 @@ out_file_t single_pass(std::string filename) {
 
 void write_file(std::string filename, out_file_t out_file) {
 
-}
-
-std::string strVectorJoin(const std::vector<std::string> &elements, const std::string &separator) {
-	std::string result;
-	for (size_t i = 0; i < elements.size(); ++i) {
-		if (i != 0)
-			result += separator;
-		result += elements[i];
-	}
-	return result;
 }
 
 int main(int argc, char **argv) {

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "preprocessor.h"
+#include "utils.h"
 
 #define TOKEN_SEP " \t"
 
@@ -25,7 +26,6 @@ int is_section(const char *line, const char *section) {
 	return result == 0;
 }
 
-
 int is_empty(const char *line) {
 	PREP_STRTOK(line, str, aux, token);
 	token = strtok_r(aux, TOKEN_SEP, &aux);
@@ -42,7 +42,6 @@ int is_end(const char *line) {
 	return result == 0;
 }
 
-
 int is_label(const char *line) {
 	PREP_STRTOK(line, str, aux, token);
 	token = strtok_r(aux, TOKEN_SEP, &aux);
@@ -54,7 +53,6 @@ int is_label(const char *line) {
 	return result;
 }
 
-
 void strip_comment(char *line) {
 	int len = strlen(line);
 	for(int i = 0; i < len; i++) {
@@ -64,7 +62,6 @@ void strip_comment(char *line) {
 		}
 	}
 }
-
 
 std::string preprocess_file(const std::string str_filename){
 	const char *filename = str_filename.c_str();
@@ -148,16 +145,6 @@ std::string preprocess_file(const std::string str_filename){
 	free(end);
 	std::string str_ppd_filename(ppd_filename);
 	return str_ppd_filename;
-}
-
-std::string strVectorJoin(const std::vector<std::string> &elements, const std::string &separator) {
-	std::string result;
-	for (size_t i = 0; i < elements.size(); ++i) {
-		if (i != 0)
-			result += separator;
-		result += elements[i];
-	}
-	return result;
 }
 
 int main(int argc, char **argv) {

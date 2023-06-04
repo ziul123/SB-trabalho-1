@@ -18,7 +18,7 @@ all: setup $(PROGRAMS)
 setup:
 	mkdir -p $(BIN_DIR) $(OBJ_DIR)
 
-preprocessor: $(OBJ_DIR)/preprocessor.o
+preprocessor: $(OBJ_DIR)/preprocessor.o $(OBJ_DIR)/utils.o
 	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
 
 montador: $(OBJ_DIR)/montador.o $(OBJ_DIR)/tables.o $(OBJ_DIR)/preprocessor.o
@@ -28,6 +28,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c -MMD -MP $< -o $@
 
 -include $(DEP_FILES)
+
 .PHONY: clean
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d $(addprefix $(BIN_DIR)/,$(PROGRAMS))
