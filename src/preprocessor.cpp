@@ -3,15 +3,17 @@
 #include <cstring>
 #include <cctype>
 #include <string>
+#include <vector>
 #include "preprocessor.h"
+#include "utils.h"
 
 #define TOKEN_SEP " \t"
 
 #define PREP_STRTOK(ORIG, STR, AUX, TOK)\
-	char *(STR) = (char *) malloc((strlen(line) + 1) * sizeof(char));\
-	char *(AUX) = (STR);\
-	strcpy((STR), (ORIG));\
-	char *(TOK)
+	char *STR = (char *) malloc((strlen(line) + 1) * sizeof(char));\
+	char *AUX = STR;\
+	strcpy(STR, ORIG);\
+	char *TOK
 
 int is_section(const char *line, const char *section) {
 	PREP_STRTOK(line, str, aux, token);
@@ -23,7 +25,6 @@ int is_section(const char *line, const char *section) {
 	free(str);
 	return result == 0;
 }
-
 
 int is_empty(const char *line) {
 	PREP_STRTOK(line, str, aux, token);
@@ -41,7 +42,6 @@ int is_end(const char *line) {
 	return result == 0;
 }
 
-
 int is_label(const char *line) {
 	PREP_STRTOK(line, str, aux, token);
 	token = strtok_r(aux, TOKEN_SEP, &aux);
@@ -53,7 +53,6 @@ int is_label(const char *line) {
 	return result;
 }
 
-
 void strip_comment(char *line) {
 	int len = strlen(line);
 	for(int i = 0; i < len; i++) {
@@ -64,10 +63,9 @@ void strip_comment(char *line) {
 	}
 }
 
-
 std::string preprocess_file(const std::string str_filename){
 	const char *filename = str_filename.c_str();
-	char *ppd_filename = (char *) malloc((strlen(filename) + 5) * sizeof(char));
+	char *ppd_filename = (char *) malloc((strlen(filename) + 4) * sizeof(char));
 	strcpy(ppd_filename, filename);
 	strcat(ppd_filename, ".pre");
 	FILE *file, *ppd_file;
@@ -77,7 +75,7 @@ std::string preprocess_file(const std::string str_filename){
 	
 	file = fopen(filename, "r");
 	if(!file) {
-		printf("Arquivo <%s> nao existe\n", filename);
+		printf("File <%s> doesn't exist.\n", filename);
 		return NULL;
 	}
 	//pegar tamanho do arquivo
@@ -130,7 +128,7 @@ std::string preprocess_file(const std::string str_filename){
 	}
 
 	if(strlen(text) == 0) {
-		printf("Erro! Faltando seção TEXT");
+		printf("Error! Missing section TEXT");
 		exit(1);
 	}
 	if(strlen(begin) != 0 && strlen(end) == 0) {
@@ -154,9 +152,17 @@ std::string preprocess_file(const std::string str_filename){
 }
 
 int main(int argc, char **argv) {
-	std::string filename(argv[1]);
-	std::string ppd_filename = preprocess_file(filename);
-	printf("preprocessed file in %s\n", ppd_filename.c_str());
+	if (argc == 1) {
+		printf("Please, input the files you want to pre-process when calling the program.");
+		return 0;
+	}
+
+	std::vector<std::string> filenames(argc-1);
+	for (int i = 1; i < argc; i++) {
+		std::string filename(argv[i]);
+		filenames[i-1] = preprocess_file(filename);
+	}
+	printf("Pre-processed given files into %s\n", strVectorJoin(filenames, ", ").c_str());
+	
 	return 0;
 }
-

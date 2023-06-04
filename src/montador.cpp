@@ -5,11 +5,12 @@
 #include "files.h"
 #include "preprocessor.h"
 #include "tables.h"
+#include "utils.h"
 
 #define TOKEN_SEP " \t"
 
-bool is_linked(const char *str, char *modulo) {
-	char *line = malloc((strlen(str) + 1) * sizeof(char));
+bool is_linked(const char *str) {
+	char *line = (char*) malloc((strlen(str) + 1) * sizeof(char));
 	char *aux = line;
 	sscanf(str, "%[^n]s", line);
 	modulo = strtok_r(aux, " ", &aux);
@@ -36,7 +37,7 @@ out_file_t single_pass(std::string filename) {
 	std::vector<int> code;
 	long int str_len;
 	char *orig;
-	FILE *file = fopen(filename, "r");
+	FILE *file = fopen(filename.c_str(), "r");
 
 	fseek(file, 0L, SEEK_END);
 	str_len = ftell(file);
@@ -75,7 +76,7 @@ out_file_t single_pass(std::string filename) {
 				token.assign(strtok_r(line, TOKEN_SEP, &line));
 				def_table[token] = -1;
 			} else {
-				printf("Erro na linha <%s>: EXTERN em arquivo sem BEGIN e END\n", line_count);
+				printf("Erro na linha <%d>: EXTERN em arquivo sem BEGIN e END\n", line_count);
 			}
 		}
 
@@ -93,11 +94,21 @@ void write_file(std::string filename, out_file_t out_file) {
 }
 
 int main(int argc, char **argv) {
-	std::string filename(argv[1]);
-	std::string asm_filename = filename + ".asm";
-	std::string ppd_filename = preprocess_file(asm_filename);
-	out_file_t out_file = single_pass(ppd_filename);
-	write_file(filename, out_file);
+	if (argc == 1) {
+		printf("Please, input the files you want to pre-process when calling the program.");
+		return 0;
+	}
 
+	std::vector<std::string> filenames(argc-1);
+	for (int i = 1; i < argc; i++) {
+		std::string filename(argv[i]);
+		std::string asm_filename = filename + ".asm";
+		std::string ppd_filename = preprocess_file(asm_filename);
+		out_file_t out_file = single_pass(ppd_filename);
+		write_file(filename, out_file);
+		filenames[i-1] = filename;
+	}
+	printf("Assembled given files into %s\n", strVectorJoin(filenames, ", ").c_str());
+	
 	return 0;
 }

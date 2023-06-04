@@ -1,5 +1,6 @@
 #ifndef FILES_H
 #define FILES_H
+#include "tables.h"
 
 typedef enum filetype {OBJ, EXC} filetype;
 

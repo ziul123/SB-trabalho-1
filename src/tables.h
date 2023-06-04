@@ -4,13 +4,12 @@
 #include <map>
 #include <string>
 
-typedef struct symbol_cell {
+typedef struct symbol_cell_t {
 	int address;
 	bool defined;
 	bool external;
 	std::vector<int> dependencies;
 } symbol_cell_t;
-
 
 typedef std::map<std::string, symbol_cell_t> symbol_table_t;
 
