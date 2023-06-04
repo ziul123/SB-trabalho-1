@@ -133,6 +133,10 @@ std::string preprocess_file(const std::string str_filename){
 		printf("Erro! Faltando seção TEXT");
 		exit(1);
 	}
+	if(strlen(begin) != 0 && strlen(end) == 0) {
+		printf("Erro! Faltando END");
+		exit(1);
+	}
 
 	ppd_file = fopen(ppd_filename, "w+");
 	fputs(begin, ppd_file);
