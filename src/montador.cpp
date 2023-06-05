@@ -78,7 +78,7 @@ out_file_t* single_pass(std::string filename) {
 				token.assign(strtok_r(line, TOKEN_SEP, &line));
 				def_table[token] = -1;
 			} else {
-				printf("Erro na linha <%d>: EXTERN em arquivo sem BEGIN e END\n", line_count);
+				printf("Error at line <%d>: EXTERN in file without BEGIN and END\n", line_count);
 			}
 		}
 
@@ -93,7 +93,7 @@ out_file_t* single_pass(std::string filename) {
 
 int main(int argc, char **argv) {
 	if (argc == 1) {
-		printf("Please, input the files you want to pre-process when calling the program.");
+		printf("Please, input the files you want to assemble when calling the program.");
 		return 0;
 	}
 

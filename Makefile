@@ -21,7 +21,10 @@ setup:
 preprocessor: $(OBJ_DIR)/preprocessor.o $(OBJ_DIR)/utils.o
 	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
 
-montador: $(OBJ_DIR)/montador.o $(OBJ_DIR)/tables.o $(OBJ_DIR)/preprocessor.o $(OBJ_DIR)/utils.o
+montador: $(OBJ_DIR)/montador.o $(OBJ_DIR)/files.o $(OBJ_DIR)/tables.o $(OBJ_DIR)/preprocessor.o $(OBJ_DIR)/utils.o
+	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
+
+linker: $(OBJ_DIR)/linker.o $(OBJ_DIR)/files.o $(OBJ_DIR)/tables.o $(OBJ_DIR)/utils.o
 	$(CC) $(CFLAGS) $^ -o $(BIN_DIR)/$@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp

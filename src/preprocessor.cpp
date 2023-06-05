@@ -132,7 +132,7 @@ std::string preprocess_file(const std::string str_filename){
 		exit(1);
 	}
 	if(strlen(begin) != 0 && strlen(end) == 0) {
-		printf("Erro! Faltando END");
+		printf("Error! Missing END");
 		exit(1);
 	}
 
