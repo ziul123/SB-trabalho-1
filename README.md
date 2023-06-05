@@ -20,7 +20,7 @@
 * './montador [file1] [file2] (...) [file n]' - Recebe arquivos '.asm' e retorna '.obj' ou '.exc':
   * Com BEGIN/END: './montador MOD_A MOD_B MOD_C' -> MOD_A.obj, MOD_B.obj, MOD_C.obj
   * Sem BEGIN/END: './montador MOD_A MOD_B MOD_C' -> MOD_A.exc
-* './linker [file1] [file2] (...) [file n]' - Recebe arquivos '.asm' e retorna o '.exc' ligado:
+* './linker [file1] [file2] (...) [file n]' - Recebe arquivos '.obj' e retorna o '.exc' ligado:
   * './linker MOD_A MOD_B MOD_C' -> MOD_A.exc
 
 ### Observações:
