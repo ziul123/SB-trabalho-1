@@ -25,3 +25,4 @@
 
 ### Observações:
 * As linhas dos erros léxicos, sintáticos ou semânticos serão indicadas em relação ao arquivo pré-processado, não ao arquivo original.
+* O mnemônico da instrução de multiplicação é MUL.
