@@ -9,7 +9,7 @@ SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 DEP_FILES = $(OBJ_FILES:.o=.d)
 
-PROGRAMS = montador linker
+PROGRAMS = montador
 
 .PHONY: all
 all: setup $(PROGRAMS)
