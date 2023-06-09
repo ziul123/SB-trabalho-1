@@ -4,8 +4,11 @@
 #include <cstdio>
 #include "tables.h"
 
+typedef enum filetype {EXC, OBJ} filetype;
+
 class out_file_t {
 	public:
+		filetype type;
 		std::vector<int> code;
 		out_file_t() {}
 		virtual void write_file(std::string filename) = 0;

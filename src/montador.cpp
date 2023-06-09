@@ -35,8 +35,10 @@
 	if (linhas.find(token) == linhas.end())\
 		linhas[token] = line_count;\
 	int addr = search_symbol_table(symbol_table, token, address);\
-	if (addr == -1 && link)\
+	if (addr == -1 && link) {\
 		add_use(use_table, token, address);\
+		addr = 0;\
+	}\
 	NEXT_TOKEN;\
 	LABEL_MESMA_LINHA(token, line_count);\
 	if (token == "+") {\
@@ -59,8 +61,10 @@
 	if (linhas.find(token) == linhas.end())\
 		linhas[token] = line_count;\
 	addr = search_symbol_table(symbol_table, token, address);\
-	if (addr == -1 && link)\
+	if (addr == -1 && link){\
 		add_use(use_table, token, address);\
+		addr = 0;\
+	}\
 	NEXT_TOKEN;\
 	LABEL_MESMA_LINHA(token, line_count);\
 	if (token == "+") {\
@@ -76,8 +80,8 @@ bool is_linked(const char *str, char *modulo) {
 	char *line = (char*) malloc((strlen(str) + 1) * sizeof(char));
 	char *aux = line;
 	sscanf(str, "%[^n]s", line);
-	strcpy(modulo, strtok_r(aux, " ", &aux));
-	char *token = strtok_r(aux, " ", &aux);
+	strcpy(modulo, strtok_r(aux, TOKEN_SEP, &aux));
+	char *token = strtok_r(aux, " \t\n", &aux);
 	bool result = strcmp(token, "BEGIN") == 0;
 	free(line);
 	return result;
@@ -177,16 +181,17 @@ out_file_t* single_pass(std::string filename) {
 	char *modulo = (char *) malloc(str_len * sizeof(char));
 
 	bool link = is_linked(orig, modulo);
+	int line_count = 1;
 	if(link) {
 		modulo[strlen(modulo)-1] = '\0';
 		std::string s(modulo);
 		add_label(symbol_table, s, 0, true, false);
 		strtok_r(aux, "\n", &aux);
+		line_count++;
 	}
 	free(modulo);
 
 	char *line;
-	int line_count = 1;
 	int address = 0;
 
 	while((line = strtok_r(aux, "\n", &aux))) {
@@ -285,7 +290,7 @@ out_file_t* single_pass(std::string filename) {
 	
 	for (auto i: symbol_table) {
 		if (!(i.second).dependencies.empty())
-			printf("Erro na linha <%d>: label não definida na seção %s\n", linhas[i.first], sections[i.first].c_str());
+			printf("Erro na linha <%d>: label '%s' não definida na seção %s\n", linhas[i.first], i.first.c_str(), sections[i.first].c_str());
 	}
 
 	if (link) {
@@ -293,6 +298,7 @@ out_file_t* single_pass(std::string filename) {
 			def_table[i.first] = symbol_table[i.first].address;
 		}
 		obj_file_t* obj_file = new obj_file_t();
+		obj_file->type = OBJ;
 		obj_file->use_table = use_table;
 		obj_file->def_table = def_table;
 		obj_file->relative = relative;
@@ -300,6 +306,7 @@ out_file_t* single_pass(std::string filename) {
 		return obj_file;
 	} else {
 		exc_file_t* exc_file = new exc_file_t();
+		exc_file->type = EXC;
 		exc_file->code = code;
 		return exc_file;
 	}
@@ -317,7 +324,10 @@ int main(int argc, char **argv) {
 		std::string asm_filename = filename + ".asm";
 		std::string ppd_filename = preprocess_file(asm_filename);
 		out_file_t* out_file = single_pass(ppd_filename);
-		filename = filename + ".exc";
+		if (out_file->type == EXC)
+			filename = filename + ".exc";
+		else if (out_file->type == OBJ)
+			filename = filename + ".obj";
 		out_file->write_file(filename);
 		free(out_file);
 		filenames[i-1] = filename;
