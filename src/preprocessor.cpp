@@ -128,11 +128,11 @@ std::string preprocess_file(const std::string str_filename){
 	}
 
 	if(strlen(text) == 0) {
-		printf("Error! Missing section TEXT");
+		printf("Error! Missing section TEXT\n");
 		exit(1);
 	}
 	if(strlen(begin) != 0 && strlen(end) == 0) {
-		printf("Error! Missing END");
+		printf("Error! Missing END\n");
 		exit(1);
 	}
 

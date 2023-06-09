@@ -88,6 +88,8 @@ bool is_linked(const char *str, char *modulo) {
 }
 
 bool is_label(const std::string token) {
+	if (token == "")
+		return false;
 	return token[token.length()-1] == ':';
 }
 
