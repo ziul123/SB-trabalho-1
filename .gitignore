@@ -1,7 +1,8 @@
 *.swp
 *.o
 obj/*
-examples/*.pre
+examples/*
 preprocessor
 montador
+linker
 .vscode

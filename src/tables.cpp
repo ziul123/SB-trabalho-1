@@ -1,7 +1,6 @@
 #include <vector>
 #include "tables.h"
 
-
 symbol_cell_t create_s_cell(int addr, bool def, bool external) {
 	symbol_cell_t s_cell;
 	std::vector<int> dependencies;

@@ -1,5 +1,6 @@
 #ifndef FILES_H
 #define FILES_H
+
 #include <cstdio>
 #include "tables.h"
 
@@ -16,45 +17,13 @@ class obj_file_t: public out_file_t {
 		def_table_t def_table;
 		std::vector<int> relative;
 		obj_file_t(): out_file_t() {}
-		void write_file(std::string filename) override {
-			filename = filename + ".obj";
-			FILE *file = fopen(filename.c_str(), "w+");
-			fputs("USO\n", file);
-			for (auto i: this->use_table) {
-				std::string s = i.first + " ";
-				fputs(s.c_str(), file);
-				for (auto a: i.first) {
-					fputs(std::to_string(a).c_str(), file);
-					fputc(' ', file);
-				}
-				fputc('\n', file);
-			}
-			fputs("RELATIVOS\n", file);
-			for (auto a: this->relative) {
-				fputs(std::to_string(a).c_str(), file);
-				fputc(' ', file);
-			}
-			fputs("\nCODE\n", file);
-			for (auto a: this->code) {
-				fputs(std::to_string(a).c_str(), file);
-				fputc(' ', file);
-			}
-			fclose(file);
-		} 
+		void write_file(std::string filename) override; 
 };
 
 class exc_file_t: public out_file_t {
 	public:
 		exc_file_t(): out_file_t(){};
-		void write_file(std::string filename) override {
-			filename = filename + ".exc";
-			FILE *file = fopen(filename.c_str(), "w+");
-			for (auto x: this->code) {
-				fputs(std::to_string(x).c_str(), file);
-				fputc(' ', file);
-			}
-			fclose(file);
-		}
+		void write_file(std::string filename) override; 
 };
 
 

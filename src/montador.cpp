@@ -198,7 +198,7 @@ out_file_t* single_pass(std::string filename) {
 				NEXT_TOKEN;
 				add_label(symbol_table, token, 0, true, true);
 			} else {
-				printf("Erro na linha <%d>: EXTERN em arquivo sem BEGIN e END\n", line_count);
+				printf("Error at line <%d>: EXTERN in file without BEGIN and END\n", line_count);
 			}
 			line_count++;
 			continue;
@@ -272,29 +272,6 @@ out_file_t* single_pass(std::string filename) {
 		} else if (token == "STORE") {
 			UNARY_INST(11);
 		} else if (token == "INPUT") {
-/*
-			code.push_back(12);
-			address++;
-			NEXT_TOKEN;
-			LABEL_MESMA_LINHA(token, line_count);
-
-			if (!valid_label(token))
-				printf("Erro na linha <%d>: label inválida\n", line_count);
-			add_section(sections, token, 12);
-			if (linhas.find(token) == linhas.end())
-				linhas[token] = line_count;
-			int addr = search_symbol_table(symbol_table, token, address);
-			if (addr == -1 && link)
-				add_use(use_table, token, address);
-			NEXT_TOKEN;
-			LABEL_MESMA_LINHA(token, line_count);
-			if (token == "+") {
-				NEXT_TOKEN;
-				LABEL_MESMA_LINHA(token, line_count);
-				addr += std::stoi(token, nullptr, 0);
-			}
-			relative.push_back(address++);
-			code.push_back(addr);*/
 			UNARY_INST(12);
 		} else if (token == "OUTPUT") {
 			UNARY_INST(13);
@@ -330,7 +307,7 @@ out_file_t* single_pass(std::string filename) {
 
 int main(int argc, char **argv) {
 	if (argc == 1) {
-		printf("Please, input the files you want to pre-process when calling the program.");
+		printf("Please, input the files you want to assemble when calling the program.");
 		return 0;
 	}
 
@@ -340,6 +317,7 @@ int main(int argc, char **argv) {
 		std::string asm_filename = filename + ".asm";
 		std::string ppd_filename = preprocess_file(asm_filename);
 		out_file_t* out_file = single_pass(ppd_filename);
+		filename = filename + ".exc";
 		out_file->write_file(filename);
 		free(out_file);
 		filenames[i-1] = filename;
