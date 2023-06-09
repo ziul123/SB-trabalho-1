@@ -1,7 +1,6 @@
 *.swp
 *.o
 obj/*
-examples/*
 preprocessor
 montador
 linker
